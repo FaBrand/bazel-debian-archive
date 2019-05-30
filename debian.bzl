@@ -1,10 +1,4 @@
-_DEFAULT_BUILD_FILE_TEMPLATE = """
-filegroup(
-    name = "files",
-    srcs = glob(["**/*"]),
-    visibility = ["//visibility:public"],
-)
-"""
+load("@bazel_tools//tools/build_defs/repo:utils.bzl", "workspace_and_buildfile")
 
 def __make_output_name(name, url):
     return name
@@ -37,16 +31,7 @@ def _cleanup_download_dir(ctx):
         fail("Cleanup failed")
 
 def _setup_bazel_files(ctx):
-    if ctx.attr.build_file:
-        ctx.symlink(ctx.attr.build_file, "BUILD.bazel")
-    else:
-        build_file_content = _DEFAULT_BUILD_FILE_TEMPLATE.format(name = ctx.name)
-        ctx.file("BUILD.bazel", build_file_content)
-
-    if ctx.attr.workspace_file:
-        ctx.symlink(ctx.path(ctx.attr.workspace_file), "WORKSPACE")
-    else:
-        ctx.file("WORKSPACE", "")
+    workspace_and_buildfile(ctx)
 
 def _get_urls_to_load(ctx):
     all_urls = []
@@ -79,7 +64,9 @@ debian_archive = repository_rule(
         "url": attr.string(default = ""),
         "urls": attr.string_list(default = []),
         "build_file": attr.label(allow_single_file = True),
+        "build_file_content": attr.string(default = ""),
         "workspace_file": attr.label(allow_single_file = True),
+        "workspace_file_content": attr.string(default = ""),
     },
     local = False,
     implementation = _debian_archive_impl,
