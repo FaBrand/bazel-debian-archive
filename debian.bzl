@@ -22,14 +22,6 @@ def _extract_debian(ctx, url):
     if not extraction_succeeded:
         fail("Extraction failed")
 
-def _cleanup_download_dir(ctx):
-    # Not yet in bazel 0.25.2
-    # ctx.delete("extracted/usr/share/")
-    cleanup = ctx.execute(["rm", "-rf", "usr/share"])
-    cleanup = cleanup and ctx.execute(["rm", "-f", ctx.name])
-    if not cleanup:
-        fail("Cleanup failed")
-
 def _setup_bazel_files(ctx):
     workspace_and_buildfile(ctx)
 
@@ -59,7 +51,6 @@ def _debian_archive_impl(ctx):
         _download_debian(ctx, url, sha)
         _extract_debian(ctx, url)
 
-    _cleanup_download_dir(ctx)
     _setup_bazel_files(ctx)
 
 debian_archive = repository_rule(
