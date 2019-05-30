@@ -41,6 +41,9 @@ def _get_urls_to_load(ctx):
 
 def _assert_preconditions(ctx):
     """Check constraints on attributes that aren't enforced by bazel"""
+    if not ctx.attr.build_file and not ctx.attr.build_file_content:
+        fail("Please provide a build_file or build_file_content attribute")
+
     if not ctx.attr.url and not ctx.attr.urls:
         fail("At least one of url and urls must be provided")
 
