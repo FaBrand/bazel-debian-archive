@@ -65,7 +65,12 @@ def _get_urls_to_load(ctx):
         all_urls = [ctx.attr.url] + all_urls
     return all_urls
 
+def _assert_preconditions(ctx):
+    if not ctx.attr.url and not ctx.attr.urls:
+        fail("At least one of url and urls must be provided")
+
 def _debian_archive_impl(ctx):
+    _assert_preconditions(ctx)
     for url in _get_urls_to_load(ctx):
         _download_debian(ctx, url)
         _extract_debian(ctx, url)
