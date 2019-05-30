@@ -4,15 +4,6 @@ filegroup(
     srcs = glob(["**/*"]),
     visibility = ["//visibility:public"],
 )
-
-cc_library(
-    name = "lib",
-    srcs = glob(["usr/lib/**/*.a", "usr/lib/**/*.so"]),
-    hdrs = glob(["usr/include/**/*"]),
-    includes = ["usr/include"],
-    visibility = ["//visibility:public"],
-    linkstatic = True,
-)
 """
 
 def __make_output_name(name, url):
