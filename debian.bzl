@@ -69,6 +69,10 @@ def _assert_preconditions(ctx):
     if not ctx.attr.url and not ctx.attr.urls:
         fail("At least one of url and urls must be provided")
 
+    for url in _get_urls_to_load(ctx):
+        if not url.endswith(".deb"):
+            fail("Url must point to a .deb file", "url: {}".format(url))
+
 def _debian_archive_impl(ctx):
     _assert_preconditions(ctx)
     for url in _get_urls_to_load(ctx):
