@@ -4,7 +4,8 @@ def __make_output_name(name, url):
     """Construct a unique name from the rule name and the url"""
     combined = name + url
     combined = combined.replace(':','/')
-    return 
+    combined = combined.replace('.','/')
+    return combined
 
 def _download_debian(ctx, url, sha):
     """Download a single debian file"""
