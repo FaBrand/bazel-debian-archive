@@ -2,9 +2,9 @@ load("@bazel_tools//tools/build_defs/repo:utils.bzl", "workspace_and_buildfile")
 
 def __make_output_name(name, url):
     """Construct a unique name from the rule name and the url"""
-    combined = name + '/' + url
-    combined = combined.replace(':','/')
-    combined = combined.replace('.','/')
+    combined = name + "/" + url
+    combined = combined.replace(":", "/")
+    combined = combined.replace(".", "/")
     return combined
 
 def _download_debian(ctx, url, sha):
@@ -60,6 +60,7 @@ def _assert_preconditions(ctx):
 def _debian_archive_impl(ctx):
     _assert_preconditions(ctx)
     for url, sha in _get_urls_to_load(ctx).items():
+        ctx.report_progress("Loading {}".format(url))
         _download_debian(ctx, url, sha)
         _extract_debian(ctx, url)
 
