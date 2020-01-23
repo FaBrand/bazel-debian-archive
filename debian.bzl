@@ -9,6 +9,7 @@ def __make_output_name(name, url):
 
 def _download_debian(ctx, url, sha):
     """Download a single debian file"""
+    ctx.report_progress("Downloading {}".format(url))
     loaded = ctx.download(
         url = url,
         output = __make_output_name(ctx.name, url),
@@ -20,6 +21,7 @@ def _download_debian(ctx, url, sha):
 
 def _extract_debian(ctx, url):
     """Extract the debian package using the system 'dpkg-deb' tool"""
+    ctx.report_progress("Extracting {}".format(url))
     tool = ctx.which("dpkg-deb")
     if not tool:
         fail("dpkg-deb not found")
@@ -60,7 +62,6 @@ def _assert_preconditions(ctx):
 def _debian_archive_impl(ctx):
     _assert_preconditions(ctx)
     for url, sha in _get_urls_to_load(ctx).items():
-        ctx.report_progress("Loading {}".format(url))
         _download_debian(ctx, url, sha)
         _extract_debian(ctx, url)
 
